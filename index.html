@@ -4,2005 +4,1286 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Absensi dan Nilai 5B - MIS Hidayatul Mubtadiin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Nunito', sans-serif;
         }
 
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --danger: #ef233c;
-            --dark: #1a1a2e;
-            --light: #f8f9fa;
-            --gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --gradient5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a35;
+            --accent-cyan: #00d4ff;
+            --accent-pink: #ff00aa;
+            --accent-yellow: #ffcc00;
+            --accent-green: #00ff88;
+            --accent-purple: #aa00ff;
+            --accent-orange: #ff6600;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
-            color: #fff;
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Styles */
-        .header {
-            text-align: center;
-            padding: 30px 20px;
-            background: var(--gradient1);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .header h2 {
-            font-size: 1.3rem;
-            font-weight: 400;
-            opacity: 0.9;
-        }
-
-        .header p {
-            margin-top: 10px;
-            font-size: 0.95rem;
-            opacity: 0.85;
-        }
-
-        .header .wali {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 30px;
-            display: inline-block;
-        }
-
-        /* Page Navigation */
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Menu Styles */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .menu-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .menu-card::before {
-            content: '';
-            position: absolute;
+        .bg-animation {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--gradient1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 170, 0.1) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .connection-status.online {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .connection-status.offline {
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+
+        .connection-status.loading {
+            background: rgba(255, 204, 0, 0.2);
+            border: 1px solid var(--accent-yellow);
+            color: var(--accent-yellow);
+        }
+
+        .connection-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .connection-status.online .dot { background: var(--accent-green); }
+        .connection-status.offline .dot { background: #ff4444; }
+        .connection-status.loading .dot { background: var(--accent-yellow); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menu Header */
+        .menu-header {
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .school-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .menu-header h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-header h2 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .class-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .stat-card:nth-child(1) .value { color: var(--accent-cyan); }
+        .stat-card:nth-child(2) .value { color: var(--accent-green); }
+        .stat-card:nth-child(3) .value { color: var(--accent-pink); }
+
+        .stat-card .label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Detail Stats */
+        .detail-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .detail-stat {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-stat i {
+            font-size: 1.2rem;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .detail-stat:nth-child(1) i { background: rgba(0, 212, 255, 0.2); color: var(--accent-cyan); }
+        .detail-stat:nth-child(2) i { background: rgba(255, 102, 0, 0.2); color: var(--accent-orange); }
+
+        .detail-stat .info .num { font-size: 1.1rem; font-weight: 700; }
+        .detail-stat .info .txt { font-size: 0.7rem; color: var(--text-secondary); }
+
+        /* Menu Bento */
+        .menu-bento {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .bento-card {
+            position: relative;
+            border-radius: 18px;
+            padding: 20px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            overflow: hidden;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
             z-index: -1;
         }
 
-        .menu-card:nth-child(1)::before { background: var(--gradient1); }
-        .menu-card:nth-child(2)::before { background: var(--gradient3); }
-        .menu-card:nth-child(3)::before { background: var(--gradient4); }
-        .menu-card:nth-child(4)::before { background: var(--gradient2); }
+        .bento-card.absensi::before { background: linear-gradient(135deg, #1e3a5f, #0d1f33); }
+        .bento-card.absensi { border-color: rgba(0, 212, 255, 0.3); }
+        .bento-card.absensi:active { border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(0, 212, 255, 0.3); }
 
-        .menu-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
+        .bento-card.bindo::before { background: linear-gradient(135deg, #3d1e5f, #1f0d33); }
+        .bento-card.bindo { border-color: rgba(170, 0, 255, 0.3); }
+        .bento-card.bindo:active { border-color: var(--accent-purple); box-shadow: 0 0 25px rgba(170, 0, 255, 0.3); }
 
-        .menu-card:hover::before {
-            opacity: 1;
-        }
+        .bento-card.ppkn::before { background: linear-gradient(135deg, #5f1e3d, #330d1f); }
+        .bento-card.ppkn { border-color: rgba(255, 0, 170, 0.3); }
+        .bento-card.ppkn:active { border-color: var(--accent-pink); box-shadow: 0 0 25px rgba(255, 0, 170, 0.3); }
 
-        .menu-card i {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            display: block;
-        }
+        .bento-card.kejadian::before { background: linear-gradient(135deg, #5f4d1e, #332a0d); }
+        .bento-card.kejadian { border-color: rgba(255, 102, 0, 0.3); }
+        .bento-card.kejadian:active { border-color: var(--accent-orange); box-shadow: 0 0 25px rgba(255, 102, 0, 0.3); }
 
-        .menu-card:nth-child(1) i { color: #667eea; }
-        .menu-card:nth-child(2) i { color: #4facfe; }
-        .menu-card:nth-child(3) i { color: #43e97b; }
-        .menu-card:nth-child(4) i { color: #f093fb; }
+        .bento-card:active { transform: scale(0.98); }
 
-        .menu-card:hover i { color: #fff; }
-
-        .menu-card h3 {
+        .card-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.3rem;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
-        .menu-card p {
-            font-size: 0.9rem;
-            opacity: 0.7;
+        .bento-card.absensi .card-icon { background: linear-gradient(135deg, #00d4ff, #0099cc); }
+        .bento-card.bindo .card-icon { background: linear-gradient(135deg, #aa00ff, #7700b3); }
+        .bento-card.ppkn .card-icon { background: linear-gradient(135deg, #ff00aa, #cc0088); }
+        .bento-card.kejadian .card-icon { background: linear-gradient(135deg, #ff6600, #cc5200); }
+
+        .bento-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; }
+        .bento-card p { font-size: 0.7rem; color: var(--text-secondary); }
+
+        /* Menu Footer */
+        .menu-footer {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* Navigation Bar */
+        .teacher-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .teacher-info h4 { font-size: 0.85rem; }
+        .teacher-info p { font-size: 0.7rem; color: var(--text-secondary); }
+
+        /* Nav Bar */
         .nav-bar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
+            gap: 8px;
             flex-wrap: wrap;
-            gap: 15px;
         }
 
         .nav-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 25px;
+            gap: 5px;
+            padding: 10px 14px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
         }
 
-        .btn-back {
-            background: var(--gradient1);
-            color: #fff;
-        }
+        .btn-back { background: linear-gradient(135deg, var(--accent-cyan), #0099cc); color: #fff; }
+        .btn-save { background: linear-gradient(135deg, var(--accent-green), #00cc6a); color: #000; }
+        .btn-reset { background: linear-gradient(135deg, #ff6b6b, #ee5a5a); color: #fff; }
+        .btn-rekap { background: linear-gradient(135deg, var(--accent-purple), #7700b3); color: #fff; }
 
-        .btn-exit {
-            background: var(--gradient2);
-            color: #fff;
-        }
-
-        .btn-save {
-            background: var(--gradient4);
-            color: #1a1a2e;
-        }
-
-        .btn-reset {
-            background: var(--danger);
-            color: #fff;
-        }
-
-        .btn-rekap {
-            background: var(--gradient3);
-            color: #1a1a2e;
-        }
-
-        .nav-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
+        .nav-btn:active { transform: scale(0.95); }
+        .btn-group { display: flex; gap: 6px; }
 
         /* Page Title */
         .page-title {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
         }
 
-        .page-title h2 {
-            font-size: 1.6rem;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .page-title p {
-            opacity: 0.7;
-        }
+        .page-title h2 { font-size: 1.1rem; margin-bottom: 3px; }
+        .page-title p { font-size: 0.75rem; color: var(--text-secondary); }
 
         /* Date Controls */
         .date-controls {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
             border-radius: 15px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: space-between;
+            margin-bottom: 15px;
         }
 
-        .date-input-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .date-input-group label {
-            font-weight: 500;
-        }
-
+        .date-input-group { margin-bottom: 12px; }
+        .date-input-group label { display: block; font-size: 0.8rem; margin-bottom: 6px; font-weight: 600; }
         .date-input-group input[type="date"] {
-            padding: 10px 15px;
-            border: none;
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--glass-border);
             border-radius: 10px;
-            background: rgba(255,255,255,0.9);
-            color: #1a1a2e;
-            font-size: 1rem;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.9rem;
         }
 
         .holiday-check {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .holiday-check input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
+        .holiday-check label { font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .holiday-check input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent-cyan); }
         .holiday-check input[type="text"] {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.9);
-            color: #1a1a2e;
-            min-width: 200px;
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid var(--glass-border);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.85rem;
+            min-width: 120px;
         }
 
-        /* Table Styles */
+        .holiday-indicator {
+            background: linear-gradient(135deg, var(--accent-orange), #cc5200);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Table */
         .table-container {
-            background: rgba(255,255,255,0.05);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         .table-scroll {
             overflow-x: auto;
-            max-height: 70vh;
+            max-height: 55vh;
             overflow-y: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
+        table { width: 100%; border-collapse: collapse; min-width: 350px; }
+        th, td { padding: 10px 8px; text-align: center; border: 1px solid var(--glass-border); font-size: 0.8rem; }
         th {
-            background: var(--gradient1);
-            font-weight: 600;
+            background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(170,0,255,0.2));
+            font-weight: 700;
             position: sticky;
             top: 0;
             z-index: 10;
+            font-size: 0.7rem;
+            text-transform: uppercase;
         }
 
-        /* Sticky columns */
-        .sticky-col {
-            position: sticky;
-            background: #2d2d44;
-            z-index: 5;
-        }
+        .sticky-col { position: sticky; background: var(--bg-secondary); z-index: 5; }
+        .sticky-col-no { left: 0; min-width: 35px; }
+        .sticky-col-nama { left: 35px; min-width: 70px; text-align: left !important; }
+        th.sticky-col { z-index: 15; background: linear-gradient(135deg, rgba(0,212,255,0.3), rgba(170,0,255,0.3)); }
 
-        .sticky-col-no {
-            left: 0;
-            min-width: 50px;
-        }
+        tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+        tr:nth-child(even) .sticky-col { background: #1f1f3a; }
+        tr:hover td { background: rgba(0,212,255,0.1) !important; }
 
-        .sticky-col-nama {
-            left: 50px;
-            min-width: 150px;
-            text-align: left !important;
-        }
+        .nama-siswa { text-align: left; }
+        .nama-depan { font-weight: 700; font-size: 0.75rem; color: var(--accent-cyan); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nama-belakang { font-size: 0.65rem; opacity: 0.6; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        th.sticky-col {
-            z-index: 15;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        tr:nth-child(even) td:not(.sticky-col) {
-            background: rgba(255,255,255,0.02);
-        }
-
-        tr:hover td {
-            background: rgba(102, 126, 234, 0.2) !important;
-        }
-
-        .nama-siswa {
-            text-align: left;
-        }
-
-        .nama-depan {
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: block;
-        }
-
-        .nama-belakang {
-            font-size: 0.75rem;
-            opacity: 0.7;
-            display: block;
-        }
-
-        /* Attendance Buttons */
-        .absen-group {
-            display: flex;
-            gap: 5px;
-            justify-content: center;
-        }
-
+        /* Absen Buttons */
+        .absen-group { display: flex; gap: 5px; justify-content: center; }
         .absen-btn {
-            width: 35px;
-            height: 35px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .absen-btn.h { background: #4cc9f0; color: #fff; }
-        .absen-btn.s { background: #ffd60a; color: #1a1a2e; }
-        .absen-btn.i { background: #fb8500; color: #fff; }
-        .absen-btn.a { background: #ef233c; color: #fff; }
-
-        .absen-btn.active {
-            transform: scale(1.15);
-            box-shadow: 0 3px 15px rgba(0,0,0,0.4);
-        }
-
-        .absen-btn:not(.active) {
-            opacity: 0.4;
-        }
-
-        /* Input Nilai */
-        .nilai-input {
-            width: 60px;
-            padding: 8px;
+            width: 32px; height: 32px;
             border: 2px solid transparent;
             border-radius: 8px;
-            background: rgba(255,255,255,0.9);
-            color: #1a1a2e;
-            text-align: center;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.7rem;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            transition: all 0.2s;
         }
 
-        .nilai-input:focus {
-            border-color: #667eea;
-            outline: none;
-            transform: scale(1.05);
+        .absen-btn.h.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); }
+        .absen-btn.s.active { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); }
+        .absen-btn.i.active { background: var(--accent-orange); color: #000; border-color: var(--accent-orange); }
+        .absen-btn.a.active { background: #ff4444; color: #fff; border-color: #ff4444; }
+
+        /* Nilai Input */
+        .nilai-input {
+            width: 42px;
+            padding: 6px 4px;
+            border: 2px solid var(--glass-border);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.8rem;
         }
+
+        .nilai-input:focus { border-color: var(--accent-cyan); outline: none; }
 
         .nilai-rata {
-            background: var(--gradient4);
-            color: #1a1a2e;
-            font-weight: 700;
-            padding: 8px 12px;
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            color: #000;
+            font-weight: 800;
+            padding: 6px 10px;
             border-radius: 8px;
+            font-size: 0.75rem;
         }
 
-        /* Catatan Kejadian Styles */
+        /* Kejadian Form */
         .kejadian-form {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 25px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
             border-radius: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-group select,
-        .form-group textarea {
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+        .form-group select, .form-group textarea, .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: none;
+            padding: 10px 12px;
+            border: 2px solid var(--glass-border);
             border-radius: 10px;
-            background: rgba(255,255,255,0.9);
-            color: #1a1a2e;
-            font-size: 1rem;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.9rem;
         }
+        .form-group select option { background: var(--bg-secondary); }
+        .form-group textarea { min-height: 80px; resize: vertical; }
 
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .kejadian-list {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
+        .kejadian-list { display: grid; gap: 8px; }
         .kejadian-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .kejadian-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .kejadian-item.selected {
-            background: rgba(102, 126, 234, 0.3);
-            border: 2px solid #667eea;
-        }
-
-        .kejadian-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-        }
-
-        .kejadian-info {
-            flex: 1;
-        }
-
-        .kejadian-info h4 {
-            font-size: 0.95rem;
-            margin-bottom: 3px;
-        }
-
-        .kejadian-info span {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        .poin-badge {
-            background: var(--warning);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* Poin Display */
-        .poin-display {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .poin-card {
-            flex: 1;
-            min-width: 150px;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 2px solid var(--glass-border);
             border-radius: 12px;
-            text-align: center;
-        }
-
-        .poin-card.danger {
-            background: rgba(239, 35, 60, 0.3);
-            border: 2px solid var(--danger);
-        }
-
-        .poin-card.warning {
-            background: rgba(247, 37, 133, 0.3);
-            border: 2px solid var(--warning);
-        }
-
-        .poin-value {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .poin-label {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
-        /* Red mark for incidents */
-        .red-mark {
-            background: rgba(239, 35, 60, 0.3) !important;
-            border-left: 4px solid var(--danger);
-        }
-
-        .parent-call {
-            background: linear-gradient(135deg, #ef233c, #d90429) !important;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Rekap Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #1a1a2e;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
             cursor: pointer;
-            color: #fff;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+            transition: all 0.2s;
         }
+        .kejadian-item.selected { background: rgba(0,212,255,0.1); border-color: var(--accent-cyan); }
+        .kejadian-item input { width: 18px; height: 18px; pointer-events: none; accent-color: var(--accent-cyan); }
+        .kejadian-info { flex: 1; }
+        .kejadian-info h4 { font-size: 0.85rem; }
+        .kejadian-info span { font-size: 0.7rem; color: var(--text-secondary); }
+        .poin-badge { background: linear-gradient(135deg, var(--accent-pink), #cc0088); padding: 5px 10px; border-radius: 15px; font-weight: 700; font-size: 0.75rem; }
 
-        .modal-close:hover {
-            opacity: 1;
-        }
+        .red-mark { background: rgba(255,68,68,0.15) !important; border-left: 3px solid #ff4444; }
+        .parent-call { background: rgba(255,0,0,0.2) !important; animation: alertPulse 1.5s infinite; }
+        @keyframes alertPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-        /* Loading Spinner */
-        .loading {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 20px;
-        }
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; max-width: 95%; max-height: 85vh; overflow-y: auto; position: relative; width: 100%; }
+        .modal-close { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; opacity: 0.7; background: rgba(255,255,255,0.1); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .modal h2 { font-size: 1.1rem; margin-bottom: 15px; }
 
-        .loading.active {
-            display: flex;
-        }
+        /* Loading & Toast */
+        .loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; flex-direction: column; gap: 15px; }
+        .loading.active { display: flex; }
+        .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--accent-cyan); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        .toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150%); padding: 12px 25px; border-radius: 50px; font-weight: 600; z-index: 3000; font-size: 0.85rem; transition: transform 0.3s ease; max-width: 90%; text-align: center; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: linear-gradient(135deg, var(--accent-green), #00cc6a); color: #000; }
+        .toast.error { background: linear-gradient(135deg, #ff4444, #cc0000); color: #fff; }
+        .toast.info { background: linear-gradient(135deg, var(--accent-cyan), #0099cc); color: #000; }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        .status-hadir { color: var(--accent-cyan); font-weight: 700; }
+        .status-sakit { color: var(--accent-yellow); font-weight: 700; }
+        .status-izin { color: var(--accent-orange); font-weight: 700; }
+        .status-alpha { color: #ff4444; font-weight: 700; }
 
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 15px 25px;
-            border-radius: 12px;
-            color: #fff;
-            font-weight: 500;
-            z-index: 3000;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast.success { background: var(--gradient4); color: #1a1a2e; }
-        .toast.error { background: var(--danger); }
-        .toast.info { background: var(--gradient1); }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.4rem; }
-            .header h2 { font-size: 1.1rem; }
-            
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-bar {
-                flex-direction: column;
-            }
-            
-            .nav-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .date-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .date-input-group {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .sticky-col-nama {
-                left: 50px;
-                min-width: 120px;
-            }
-            
-            th, td {
-                padding: 8px 10px;
-                font-size: 0.85rem;
-            }
-            
-            .absen-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 0.75rem;
-            }
-            
-            .nilai-input {
-                width: 50px;
-                padding: 6px;
-            }
-        }
-
-        /* Button Groups */
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Status Badges */
-        .status-hadir { color: #4cc9f0; }
-        .status-sakit { color: #ffd60a; }
-        .status-izin { color: #fb8500; }
-        .status-alpha { color: #ef233c; }
-
-        /* Holiday Indicator */
-        .holiday-indicator {
-            background: var(--warning);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
+        @media (max-width: 400px) {
+            .stats-row { gap: 6px; }
+            .stat-card { padding: 10px 6px; }
+            .stat-card .value { font-size: 1.2rem; }
+            .bento-card { padding: 15px 12px; }
+            .card-icon { width: 40px; height: 40px; font-size: 1.1rem; }
+            .bento-card h3 { font-size: 0.85rem; }
+            .absen-btn { width: 28px; height: 28px; font-size: 0.65rem; }
+            .nilai-input { width: 36px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Spinner -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Memproses data...</p>
+    <div class="bg-animation"></div>
+
+    <div class="connection-status loading" id="connectionStatus">
+        <span class="dot"></span>
+        <span id="connectionText">Menghubungkan...</span>
     </div>
 
-    <!-- Toast Notification -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p id="loadingText">Memuat...</p>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>📚 Absensi dan Nilai Kelas 5B</h1>
-            <h2>MIS HIDAYATUL MUBTADIIN</h2>
-            <p>Tahun Pelajaran 2025/2026 - Semester Genap</p>
-            <div class="wali">
-                <i class="fas fa-chalkboard-teacher"></i> Wali Kelas: <strong>M. Yusni</strong>
-            </div>
-        </div>
-
-        <!-- Menu Page -->
+        <!-- MENU PAGE -->
         <div class="page active" id="page-menu">
-            <div class="menu-grid">
-                <div class="menu-card" onclick="showPage('absensi')">
-                    <i class="fas fa-clipboard-check"></i>
-                    <h3>Absensi</h3>
-                    <p>Kelola kehadiran siswa harian</p>
+            <div class="menu-header">
+                <div class="school-logo">📚</div>
+                <h1>Absensi & Nilai Kelas 5B</h1>
+                <h2>MIS Hidayatul Mubtadiin</h2>
+                <div class="class-badge">
+                    <span>TP 2025/2026 • Semester Genap</span>
                 </div>
-                <div class="menu-card" onclick="showPage('nilai-bi')">
-                    <i class="fas fa-book-open"></i>
-                    <h3>Nilai Bahasa Indonesia</h3>
-                    <p>Input nilai harian & sumatif</p>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="value" id="stat-siswa">23</div>
+                    <div class="label">Total Siswa</div>
                 </div>
-                <div class="menu-card" onclick="showPage('nilai-ppkn')">
-                    <i class="fas fa-flag"></i>
-                    <h3>Nilai PPKn</h3>
-                    <p>Input nilai harian & sumatif</p>
+                <div class="stat-card">
+                    <div class="value" id="stat-kehadiran">-%</div>
+                    <div class="label">Kehadiran</div>
                 </div>
-                <div class="menu-card" onclick="showPage('kejadian')">
+                <div class="stat-card">
+                    <div class="value" id="stat-hari">0</div>
+                    <div class="label">Hari Efektif</div>
+                </div>
+            </div>
+
+            <div class="detail-stats">
+                <div class="detail-stat">
+                    <i class="fas fa-calendar-times"></i>
+                    <div class="info">
+                        <div class="num" id="stat-libur">0</div>
+                        <div class="txt">Hari Libur</div>
+                    </div>
+                </div>
+                <div class="detail-stat">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Catatan Kejadian</h3>
-                    <p>Catat pelanggaran & poin siswa</p>
+                    <div class="info">
+                        <div class="num" id="stat-kejadian">0</div>
+                        <div class="txt">Kejadian</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-bento">
+                <div class="bento-card absensi" onclick="showPage('absensi')">
+                    <div class="card-icon"><i class="fas fa-user-check"></i></div>
+                    <h3>Absensi</h3>
+                    <p>Kehadiran harian</p>
+                </div>
+                <div class="bento-card bindo" onclick="showPage('nilai-bi')">
+                    <div class="card-icon"><i class="fas fa-book"></i></div>
+                    <h3>B. Indonesia</h3>
+                    <p>Input nilai</p>
+                </div>
+                <div class="bento-card ppkn" onclick="showPage('nilai-ppkn')">
+                    <div class="card-icon"><i class="fas fa-landmark"></i></div>
+                    <h3>PPKn</h3>
+                    <p>Input nilai</p>
+                </div>
+                <div class="bento-card kejadian" onclick="showPage('kejadian')">
+                    <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <h3>Kejadian</h3>
+                    <p>Catat pelanggaran</p>
+                </div>
+            </div>
+
+            <div class="menu-footer">
+                <div class="teacher-avatar"><i class="fas fa-user-tie"></i></div>
+                <div class="teacher-info">
+                    <h4>M. Yusni</h4>
+                    <p>Wali Kelas 5B</p>
                 </div>
             </div>
         </div>
 
-        <!-- Absensi Page -->
+        <!-- ABSENSI PAGE -->
         <div class="page" id="page-absensi">
             <div class="nav-bar">
+                <button class="nav-btn btn-back" onclick="goToMenu()"><i class="fas fa-arrow-left"></i> Menu</button>
                 <div class="btn-group">
-                    <button class="nav-btn btn-back" onclick="showPage('menu')">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </button>
-                    <button class="nav-btn btn-exit" onclick="exitApp()">
-                        <i class="fas fa-sign-out-alt"></i> Keluar
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button class="nav-btn btn-rekap" onclick="showRekapAbsensi()">
-                        <i class="fas fa-chart-bar"></i> Rekap Absen
-                    </button>
-                    <button class="nav-btn btn-rekap" onclick="showRekapLibur()">
-                        <i class="fas fa-calendar-times"></i> Rekap Libur
-                    </button>
-                    <button class="nav-btn btn-save" onclick="saveAbsensi()">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                    <button class="nav-btn btn-reset" onclick="resetAbsensi()">
-                        <i class="fas fa-redo"></i> Reset
-                    </button>
+                    <button class="nav-btn btn-rekap" onclick="showRekapAbsensi()"><i class="fas fa-chart-bar"></i></button>
+                    <button class="nav-btn btn-save" onclick="saveAbsensi()"><i class="fas fa-save"></i> Simpan</button>
                 </div>
             </div>
-
             <div class="page-title">
-                <h2><i class="fas fa-clipboard-check"></i> Absensi Harian</h2>
-                <p>Semester Genap dimulai 4 Januari 2026</p>
+                <h2><i class="fas fa-user-check"></i> Absensi Harian</h2>
+                <p>Pilih tanggal dan catat kehadiran</p>
             </div>
-
             <div class="date-controls">
                 <div class="date-input-group">
-                    <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
-                    <input type="date" id="tanggal-absen" onchange="checkHoliday()">
+                    <label><i class="fas fa-calendar"></i> Tanggal</label>
+                    <input type="date" id="tanggal-absen" onchange="loadAbsensiByDate()">
                 </div>
                 <div class="holiday-check">
-                    <input type="checkbox" id="is-holiday" onchange="toggleHoliday()">
-                    <label for="is-holiday">Hari Libur</label>
+                    <label><input type="checkbox" id="is-holiday" onchange="toggleHoliday()"> Libur</label>
                     <input type="text" id="alasan-libur" placeholder="Alasan libur..." disabled>
                 </div>
             </div>
-
-            <div id="holiday-indicator" class="holiday-indicator" style="display:none;">
-                <i class="fas fa-info-circle"></i> Hari ini adalah hari libur
-            </div>
-
-            <div class="table-container">
+            <div id="holiday-indicator" class="holiday-indicator" style="display:none;"><i class="fas fa-info-circle"></i> Hari Libur</div>
+            <div class="table-container" id="table-container-absensi">
                 <div class="table-scroll">
-                    <table id="table-absensi">
-                        <thead>
-                            <tr>
-                                <th class="sticky-col sticky-col-no">No</th>
-                                <th class="sticky-col sticky-col-nama">Nama Siswa</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-absensi"></tbody>
-                    </table>
+                    <table><thead><tr>
+                        <th class="sticky-col sticky-col-no">No</th>
+                        <th class="sticky-col sticky-col-nama">Nama</th>
+                        <th>Status</th>
+                    </tr></thead><tbody id="tbody-absensi"></tbody></table>
                 </div>
             </div>
         </div>
 
-        <!-- Nilai Bahasa Indonesia Page -->
+        <!-- NILAI BI PAGE -->
         <div class="page" id="page-nilai-bi">
             <div class="nav-bar">
+                <button class="nav-btn btn-back" onclick="goToMenu()"><i class="fas fa-arrow-left"></i> Menu</button>
                 <div class="btn-group">
-                    <button class="nav-btn btn-back" onclick="showPage('menu')">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </button>
-                    <button class="nav-btn btn-exit" onclick="exitApp()">
-                        <i class="fas fa-sign-out-alt"></i> Keluar
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button class="nav-btn btn-rekap" onclick="showRekapNilai('bi')">
-                        <i class="fas fa-chart-bar"></i> Rekap Nilai
-                    </button>
-                    <button class="nav-btn btn-save" onclick="saveNilai('bi')">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                    <button class="nav-btn btn-reset" onclick="resetNilai('bi')">
-                        <i class="fas fa-redo"></i> Reset
-                    </button>
+                    <button class="nav-btn btn-rekap" onclick="showRekapNilai('bi')"><i class="fas fa-chart-bar"></i></button>
+                    <button class="nav-btn btn-save" onclick="saveNilai('bi')"><i class="fas fa-save"></i> Simpan</button>
                 </div>
             </div>
-
             <div class="page-title">
-                <h2><i class="fas fa-book-open"></i> Nilai Bahasa Indonesia</h2>
-                <p>Input nilai harian, STS, dan SAT</p>
+                <h2><i class="fas fa-book"></i> Nilai B. Indonesia</h2>
+                <p>NH=Nilai Harian, STS=Tengah Semester, SAT=Akhir Tahun</p>
             </div>
-
             <div class="table-container">
                 <div class="table-scroll">
-                    <table id="table-nilai-bi">
-                        <thead>
-                            <tr>
-                                <th class="sticky-col sticky-col-no">No</th>
-                                <th class="sticky-col sticky-col-nama">Nama Siswa</th>
-                                <th>NH 1</th>
-                                <th>NH 2</th>
-                                <th>NH 3</th>
-                                <th>NH 4</th>
-                                <th>NH 5</th>
-                                <th>STS</th>
-                                <th>SAT</th>
-                                <th>Rata-rata</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-nilai-bi"></tbody>
-                    </table>
+                    <table><thead><tr>
+                        <th class="sticky-col sticky-col-no">No</th>
+                        <th class="sticky-col sticky-col-nama">Nama</th>
+                        <th>NH1</th><th>NH2</th><th>NH3</th><th>NH4</th><th>NH5</th><th>STS</th><th>SAT</th><th>Rata²</th>
+                    </tr></thead><tbody id="tbody-nilai-bi"></tbody></table>
                 </div>
             </div>
         </div>
 
-        <!-- Nilai PPKn Page -->
+        <!-- NILAI PPKN PAGE -->
         <div class="page" id="page-nilai-ppkn">
             <div class="nav-bar">
+                <button class="nav-btn btn-back" onclick="goToMenu()"><i class="fas fa-arrow-left"></i> Menu</button>
                 <div class="btn-group">
-                    <button class="nav-btn btn-back" onclick="showPage('menu')">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </button>
-                    <button class="nav-btn btn-exit" onclick="exitApp()">
-                        <i class="fas fa-sign-out-alt"></i> Keluar
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button class="nav-btn btn-rekap" onclick="showRekapNilai('ppkn')">
-                        <i class="fas fa-chart-bar"></i> Rekap Nilai
-                    </button>
-                    <button class="nav-btn btn-save" onclick="saveNilai('ppkn')">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                    <button class="nav-btn btn-reset" onclick="resetNilai('ppkn')">
-                        <i class="fas fa-redo"></i> Reset
-                    </button>
+                    <button class="nav-btn btn-rekap" onclick="showRekapNilai('ppkn')"><i class="fas fa-chart-bar"></i></button>
+                    <button class="nav-btn btn-save" onclick="saveNilai('ppkn')"><i class="fas fa-save"></i> Simpan</button>
                 </div>
             </div>
-
             <div class="page-title">
-                <h2><i class="fas fa-flag"></i> Nilai PPKn</h2>
-                <p>Input nilai harian, STS, dan SAT</p>
+                <h2><i class="fas fa-landmark"></i> Nilai PPKn</h2>
+                <p>NH=Nilai Harian, STS=Tengah Semester, SAT=Akhir Tahun</p>
             </div>
-
             <div class="table-container">
                 <div class="table-scroll">
-                    <table id="table-nilai-ppkn">
-                        <thead>
-                            <tr>
-                                <th class="sticky-col sticky-col-no">No</th>
-                                <th class="sticky-col sticky-col-nama">Nama Siswa</th>
-                                <th>NH 1</th>
-                                <th>NH 2</th>
-                                <th>NH 3</th>
-                                <th>NH 4</th>
-                                <th>NH 5</th>
-                                <th>STS</th>
-                                <th>SAT</th>
-                                <th>Rata-rata</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-nilai-ppkn"></tbody>
-                    </table>
+                    <table><thead><tr>
+                        <th class="sticky-col sticky-col-no">No</th>
+                        <th class="sticky-col sticky-col-nama">Nama</th>
+                        <th>NH1</th><th>NH2</th><th>NH3</th><th>NH4</th><th>NH5</th><th>STS</th><th>SAT</th><th>Rata²</th>
+                    </tr></thead><tbody id="tbody-nilai-ppkn"></tbody></table>
                 </div>
             </div>
         </div>
 
-        <!-- Catatan Kejadian Page -->
+        <!-- KEJADIAN PAGE -->
         <div class="page" id="page-kejadian">
             <div class="nav-bar">
+                <button class="nav-btn btn-back" onclick="goToMenu()"><i class="fas fa-arrow-left"></i> Menu</button>
                 <div class="btn-group">
-                    <button class="nav-btn btn-back" onclick="showPage('menu')">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </button>
-                    <button class="nav-btn btn-exit" onclick="exitApp()">
-                        <i class="fas fa-sign-out-alt"></i> Keluar
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button class="nav-btn btn-rekap" onclick="showRekapKejadian()">
-                        <i class="fas fa-chart-bar"></i> Rekap Poin
-                    </button>
-                    <button class="nav-btn btn-save" onclick="saveKejadian()">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                    <button class="nav-btn btn-reset" onclick="resetKejadian()">
-                        <i class="fas fa-redo"></i> Reset
-                    </button>
+                    <button class="nav-btn btn-rekap" onclick="showRekapKejadian()"><i class="fas fa-chart-bar"></i></button>
+                    <button class="nav-btn btn-save" onclick="saveKejadian()"><i class="fas fa-save"></i> Simpan</button>
                 </div>
             </div>
-
             <div class="page-title">
-                <h2><i class="fas fa-exclamation-triangle"></i> Catatan Kejadian</h2>
-                <p>Catat pelanggaran dan akumulasi poin siswa</p>
+                <h2><i class="fas fa-clipboard-list"></i> Catatan Kejadian</h2>
+                <p>Dokumentasi pelanggaran siswa</p>
             </div>
-
             <div class="kejadian-form">
                 <div class="form-group">
-                    <label><i class="fas fa-user"></i> Pilih Siswa:</label>
-                    <select id="select-siswa-kejadian">
-                        <option value="">-- Pilih Siswa --</option>
-                    </select>
+                    <label><i class="fas fa-user"></i> Siswa</label>
+                    <select id="select-siswa-kejadian"><option value="">-- Pilih --</option></select>
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fas fa-calendar"></i> Tanggal Kejadian:</label>
-                    <input type="date" id="tanggal-kejadian" style="width:100%; padding:12px; border-radius:10px; border:none;">
+                    <label><i class="fas fa-calendar"></i> Tanggal</label>
+                    <input type="date" id="tanggal-kejadian">
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fas fa-list"></i> Jenis Pelanggaran:</label>
-                    <div class="kejadian-list" id="kejadian-list">
-                        <div class="kejadian-item" onclick="toggleKejadian(this, 1)">
+                    <label><i class="fas fa-list"></i> Pelanggaran</label>
+                    <div class="kejadian-list">
+                        <div class="kejadian-item" onclick="toggleKejadian(this,1)">
                             <input type="checkbox" id="kej-1">
-                            <div class="kejadian-info">
-                                <h4>Berkata Kotor</h4>
-                                <span>Maks. 5 kali (total 25 poin)</span>
-                            </div>
-                            <span class="poin-badge">5 poin</span>
+                            <div class="kejadian-info"><h4>Berkata Kotor</h4><span>Max 5x</span></div>
+                            <span class="poin-badge">5</span>
                         </div>
-                        <div class="kejadian-item" onclick="toggleKejadian(this, 2)">
+                        <div class="kejadian-item" onclick="toggleKejadian(this,2)">
                             <input type="checkbox" id="kej-2">
-                            <div class="kejadian-info">
-                                <h4>Tidak Masuk Kelas Saat Ulangan</h4>
-                                <span>Maks. 5 kali (total 25 poin)</span>
-                            </div>
-                            <span class="poin-badge">5 poin</span>
+                            <div class="kejadian-info"><h4>Tidak Masuk Ulangan</h4><span>Max 5x</span></div>
+                            <span class="poin-badge">5</span>
                         </div>
-                        <div class="kejadian-item" onclick="toggleKejadian(this, 3)">
+                        <div class="kejadian-item" onclick="toggleKejadian(this,3)">
                             <input type="checkbox" id="kej-3">
-                            <div class="kejadian-info">
-                                <h4>Pembulian</h4>
-                                <span>Maks. 3 kali (total 30 poin)</span>
-                            </div>
-                            <span class="poin-badge">10 poin</span>
+                            <div class="kejadian-info"><h4>Pembulian</h4><span>Max 3x</span></div>
+                            <span class="poin-badge">10</span>
                         </div>
-                        <div class="kejadian-item" onclick="toggleKejadian(this, 4)">
+                        <div class="kejadian-item" onclick="toggleKejadian(this,4)">
                             <input type="checkbox" id="kej-4">
-                            <div class="kejadian-info">
-                                <h4>Bertengkar</h4>
-                                <span>Maks. 3 kali (total 75 poin)</span>
-                            </div>
-                            <span class="poin-badge">25 poin</span>
+                            <div class="kejadian-info"><h4>Bertengkar</h4><span>Max 3x</span></div>
+                            <span class="poin-badge">25</span>
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fas fa-edit"></i> Catatan Tambahan:</label>
-                    <textarea id="catatan-kejadian" placeholder="Tuliskan detail kejadian..."></textarea>
+                    <label><i class="fas fa-edit"></i> Catatan</label>
+                    <textarea id="catatan-kejadian" placeholder="Detail..."></textarea>
                 </div>
-
-                <button class="nav-btn btn-save" onclick="addKejadian()" style="width:100%;">
-                    <i class="fas fa-plus"></i> Tambah Catatan Kejadian
-                </button>
+                <button class="nav-btn btn-save" onclick="addKejadian()" style="width:100%;padding:12px;"><i class="fas fa-plus"></i> Tambah</button>
             </div>
-
-            <!-- Daftar Kejadian Hari Ini -->
             <div class="table-container">
                 <div class="table-scroll">
-                    <table id="table-kejadian">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Nama Siswa</th>
-                                <th>Jenis Pelanggaran</th>
-                                <th>Poin</th>
-                                <th>Catatan</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-kejadian"></tbody>
-                    </table>
+                    <table><thead><tr><th>No</th><th>Tgl</th><th>Nama</th><th>Jenis</th><th>Poin</th><th>#</th></tr></thead>
+                    <tbody id="tbody-kejadian"></tbody></table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Rekap Absensi -->
+    <!-- MODALS -->
     <div class="modal" id="modal-rekap-absensi">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-rekap-absensi')">&times;</span>
-            <h2 style="margin-bottom:20px;"><i class="fas fa-chart-bar"></i> Rekap Absensi</h2>
+            <h2><i class="fas fa-chart-bar"></i> Rekap Absensi</h2>
             <div class="table-scroll">
-                <table id="table-rekap-absensi">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Hadir</th>
-                            <th>Sakit</th>
-                            <th>Izin</th>
-                            <th>Alpha</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-rekap-absensi"></tbody>
-                </table>
+                <table><thead><tr><th>No</th><th>Nama</th><th>H</th><th>S</th><th>I</th><th>A</th><th>%</th></tr></thead>
+                <tbody id="tbody-rekap-absensi"></tbody></table>
             </div>
         </div>
     </div>
 
-    <!-- Modal Rekap Libur -->
-    <div class="modal" id="modal-rekap-libur">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-rekap-libur')">&times;</span>
-            <h2 style="margin-bottom:20px;"><i class="fas fa-calendar-times"></i> Rekap Hari Libur</h2>
-            <div class="table-scroll">
-                <table id="table-rekap-libur">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Tanggal</th>
-                            <th>Alasan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-rekap-libur"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Rekap Nilai -->
     <div class="modal" id="modal-rekap-nilai">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-rekap-nilai')">&times;</span>
-            <h2 style="margin-bottom:20px;"><i class="fas fa-chart-line"></i> Rekap Nilai</h2>
+            <h2><i class="fas fa-chart-line"></i> Rekap Nilai</h2>
             <div class="table-scroll" id="content-rekap-nilai"></div>
         </div>
     </div>
 
-    <!-- Modal Rekap Kejadian -->
     <div class="modal" id="modal-rekap-kejadian">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-rekap-kejadian')">&times;</span>
-            <h2 style="margin-bottom:20px;"><i class="fas fa-exclamation-circle"></i> Rekap Poin Pelanggaran</h2>
+            <h2><i class="fas fa-exclamation-circle"></i> Rekap Poin</h2>
             <div class="table-scroll">
-                <table id="table-rekap-kejadian">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Berkata Kotor</th>
-                            <th>Tdk Masuk Ulangan</th>
-                            <th>Pembulian</th>
-                            <th>Bertengkar</th>
-                            <th>Total Poin</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-rekap-kejadian"></tbody>
-                </table>
+                <table><thead><tr><th>No</th><th>Nama</th><th>Poin</th><th>Status</th></tr></thead>
+                <tbody id="tbody-rekap-kejadian"></tbody></table>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== KONFIGURASI =====
-        const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL'; // Ganti dengan URL Apps Script Anda
+        // ============ KONFIGURASI ============
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwPyHTujSV-sq22tvSVD0BxdmIhHHsg2tV8GQLjc7qHh3JzRDmCWKduTNN6dKzMm_Ds/exec';
 
-        // Data Siswa
         const siswaList = [
-            "Abdul Basith",
-            "Abdullah Asyfaq Nawawi",
-            "Abid Aqilla Rajendra",
-            "Afreza Dwi Saputra",
-            "Anindita Keisha Azzahra",
-            "Friska Dila Aulia",
-            "Jemmy Rachad Nazzih",
-            "Kinara Syaqila Anggraini",
-            "Moh Fauzus Salam",
-            "Muhammad Azka Alvaro",
-            "Muhammad Erlangga",
-            "Muhammad Zidna Ilman",
-            "Muhammad Zulfan Alfatir",
-            "Nahwa Kamilatun Nisa",
-            "Nilam Ainur Rohmah",
-            "Nindia Ramadhani",
-            "Safitri",
-            "Nurin Najwa",
-            "Rafa Aditya Putra",
-            "Talita Indah Ayu Septiana",
-            "Wildan Faza Aufar",
-            "Zalfa Rahmuna Yasmin",
-            "Risa"
+            "Abdul Basith", "Abdullah Asyfaq Nawawi", "Abid Aqilla Rajendra",
+            "Afreza Dwi Saputra", "Anindita Keisha Azzahra", "Friska Dila Aulia",
+            "Jemmy Rachad Nazzih", "Kinara Syaqila Anggraini", "Moh Fauzus Salam",
+            "Muhammad Azka Alvaro", "Muhammad Erlangga", "Muhammad Zidna Ilman",
+            "Muhammad Zulfan Alfatir", "Nahwa Kamilatun Nisa", "Nilam Ainur Rohmah",
+            "Nindia Ramadhani", "Safitri", "Nurin Najwa", "Rafa Aditya Putra",
+            "Talita Indah Ayu Septiana", "Wildan Faza Aufar", "Zalfa Rahmuna Yasmin", "Risa"
         ];
 
-        // Jenis Pelanggaran
         const jenisKejadian = {
-            1: { nama: "Berkata Kotor", poin: 5, maxTotal: 25 },
-            2: { nama: "Tidak Masuk Kelas Saat Ulangan", poin: 5, maxTotal: 25 },
-            3: { nama: "Pembulian", poin: 10, maxTotal: 30 },
-            4: { nama: "Bertengkar", poin: 25, maxTotal: 75 }
+            1: { nama: "Berkata Kotor", poin: 5 },
+            2: { nama: "Tidak Masuk Saat Ulangan", poin: 5 },
+            3: { nama: "Pembulian", poin: 10 },
+            4: { nama: "Bertengkar", poin: 25 }
         };
 
-        // Data Absensi, Nilai, dan Kejadian
         let dataAbsensi = {};
         let dataLibur = {};
         let dataNilaiBi = {};
         let dataNilaiPpkn = {};
         let dataKejadian = [];
 
-        // ===== FUNGSI UTILITAS =====
-        function formatNama(namaLengkap) {
-            const parts = namaLengkap.split(' ');
-            if (parts.length === 1) {
-                return { depan: parts[0], belakang: '' };
-            }
-            const depan = parts[0];
-            const belakang = parts.slice(1).join(' ');
-            return { depan, belakang };
+        // ============ UTILITIES ============
+        function formatNama(nama) {
+            const parts = nama.split(' ');
+            return { depan: parts[0], belakang: parts.slice(1).join(' ') };
         }
 
-        function formatDate(date) {
-            const d = new Date(date);
-            const year = d.getFullYear();
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+        function formatDate(d) { return new Date(d).toISOString().split('T')[0]; }
+        function formatDisplay(d) { return new Date(d).toLocaleDateString('id-ID', {day:'2-digit',month:'2-digit'}); }
+
+        function showLoading(t='Memuat...') { document.getElementById('loadingText').textContent=t; document.getElementById('loading').classList.add('active'); }
+        function hideLoading() { document.getElementById('loading').classList.remove('active'); }
+
+        function showToast(msg, type='info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        function formatDisplayDate(dateStr) {
-            const d = new Date(dateStr);
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            return d.toLocaleDateString('id-ID', options);
+        function setConnection(status) {
+            const el = document.getElementById('connectionStatus');
+            const txt = document.getElementById('connectionText');
+            el.className = `connection-status ${status}`;
+            txt.textContent = status === 'online' ? 'Online' : status === 'offline' ? 'Offline' : 'Menghubungkan...';
         }
 
-        function showLoading() {
-            document.getElementById('loading').classList.add('active');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').classList.remove('active');
-        }
-
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // ===== NAVIGASI =====
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById('page-' + pageId).classList.add('active');
-
-            if (pageId === 'absensi') {
-                initAbsensi();
-            } else if (pageId === 'nilai-bi') {
-                initNilai('bi');
-            } else if (pageId === 'nilai-ppkn') {
-                initNilai('ppkn');
-            } else if (pageId === 'kejadian') {
-                initKejadian();
+        // ============ API CALLS ============
+        async function apiGet(action) {
+            try {
+                const res = await fetch(`${API_URL}?action=${action}&t=${Date.now()}`);
+                const data = await res.json();
+                setConnection('online');
+                return data;
+            } catch(e) {
+                console.error(e);
+                setConnection('offline');
+                return { success: false, error: e.message };
             }
         }
 
-        function exitApp() {
-            if (confirm('Apakah Anda yakin ingin keluar dari aplikasi?')) {
-                window.close();
-                // Fallback jika window.close() tidak bekerja
-                document.body.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:20px;"><h1>👋 Terima Kasih</h1><p>Aplikasi telah ditutup</p><button onclick="location.reload()" style="padding:15px 30px;border:none;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;cursor:pointer;font-size:1rem;">Buka Kembali</button></div>';
+        async function apiPost(payload) {
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                setConnection('online');
+                return { success: true };
+            } catch(e) {
+                console.error(e);
+                setConnection('offline');
+                return { success: false, error: e.message };
             }
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+        // ============ NAVIGATION ============
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            if (id === 'absensi') initAbsensi();
+            else if (id === 'nilai-bi') initNilai('bi');
+            else if (id === 'nilai-ppkn') initNilai('ppkn');
+            else if (id === 'kejadian') initKejadian();
         }
 
-        // ===== ABSENSI =====
-        function initAbsensi() {
-            // Set tanggal hari ini
-            const today = new Date();
-            const dateInput = document.getElementById('tanggal-absen');
-            dateInput.value = formatDate(today);
-            dateInput.min = '2026-01-04'; // Awal semester genap
-
-            renderTableAbsensi();
-            loadAbsensiFromSheet();
+        function goToMenu() { 
+            showPage('menu'); 
+            loadStatistik();
         }
 
-        function renderTableAbsensi() {
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // ============ STATISTIK ============
+        async function loadStatistik() {
+            const res = await apiGet('get-statistik');
+            if (res.success && res.data) {
+                document.getElementById('stat-siswa').textContent = res.data.totalSiswa || 23;
+                document.getElementById('stat-kehadiran').textContent = (res.data.rataKehadiran || 0) + '%';
+                document.getElementById('stat-hari').textContent = res.data.hariEfektif || 0;
+                document.getElementById('stat-libur').textContent = res.data.hariLibur || 0;
+                document.getElementById('stat-kejadian').textContent = res.data.totalKejadian || 0;
+            }
+        }
+
+        // ============ ABSENSI ============
+        async function initAbsensi() {
+            document.getElementById('tanggal-absen').value = formatDate(new Date());
+            await loadAbsensiByDate();
+        }
+
+        async function loadAbsensiByDate() {
+            const tanggal = document.getElementById('tanggal-absen').value;
+            showLoading('Memuat absensi...');
+            
+            // Load libur
+            const liburRes = await apiGet('get-libur');
+            if (liburRes.success) dataLibur = liburRes.data || {};
+            
+            // Check if holiday
+            if (dataLibur[tanggal]) {
+                document.getElementById('is-holiday').checked = true;
+                document.getElementById('alasan-libur').value = dataLibur[tanggal];
+                document.getElementById('alasan-libur').disabled = false;
+                document.getElementById('holiday-indicator').style.display = 'block';
+                document.getElementById('table-container-absensi').style.display = 'none';
+                hideLoading();
+                return;
+            } else {
+                document.getElementById('is-holiday').checked = false;
+                document.getElementById('alasan-libur').value = '';
+                document.getElementById('alasan-libur').disabled = true;
+                document.getElementById('holiday-indicator').style.display = 'none';
+                document.getElementById('table-container-absensi').style.display = 'block';
+            }
+            
+            // Load absensi
+            const res = await apiGet('get-absensi');
+            if (res.success) dataAbsensi = res.data || {};
+            
+            renderAbsensi(tanggal);
+            hideLoading();
+        }
+
+        function renderAbsensi(tanggal) {
             const tbody = document.getElementById('tbody-absensi');
             tbody.innerHTML = '';
-
-            siswaList.forEach((nama, index) => {
-                const namaParts = formatNama(nama);
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="sticky-col sticky-col-no">${index + 1}</td>
-                    <td class="sticky-col sticky-col-nama">
-                        <div class="nama-siswa">
-                            <span class="nama-depan">${namaParts.depan}</span>
-                            <span class="nama-belakang">${namaParts.belakang}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="absen-group">
-                            <button class="absen-btn h active" onclick="setAbsen(${index}, 'H', this)" title="Hadir">H</button>
-                            <button class="absen-btn s" onclick="setAbsen(${index}, 'S', this)" title="Sakit">S</button>
-                            <button class="absen-btn i" onclick="setAbsen(${index}, 'I', this)" title="Izin">I</button>
-                            <button class="absen-btn a" onclick="setAbsen(${index}, 'A', this)" title="Alpha">A</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            const dayData = dataAbsensi[tanggal] || {};
+            
+            siswaList.forEach((nama, i) => {
+                const n = formatNama(nama);
+                const status = dayData[nama] || 'H';
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="sticky-col sticky-col-no">${i+1}</td>
+                        <td class="sticky-col sticky-col-nama"><div class="nama-siswa"><span class="nama-depan">${n.depan}</span><span class="nama-belakang">${n.belakang}</span></div></td>
+                        <td><div class="absen-group">
+                            <button class="absen-btn h ${status==='H'?'active':''}" onclick="setAbsen(${i},'H',this)">H</button>
+                            <button class="absen-btn s ${status==='S'?'active':''}" onclick="setAbsen(${i},'S',this)">S</button>
+                            <button class="absen-btn i ${status==='I'?'active':''}" onclick="setAbsen(${i},'I',this)">I</button>
+                            <button class="absen-btn a ${status==='A'?'active':''}" onclick="setAbsen(${i},'A',this)">A</button>
+                        </div></td>
+                    </tr>`;
             });
-
-            // Set default semua hadir
-            const tanggal = document.getElementById('tanggal-absen').value;
-            if (!dataAbsensi[tanggal]) {
-                dataAbsensi[tanggal] = {};
-                siswaList.forEach((nama, index) => {
-                    dataAbsensi[tanggal][index] = 'H';
-                });
-            }
         }
 
-        function setAbsen(index, status, btn) {
+        function setAbsen(idx, status, btn) {
             const tanggal = document.getElementById('tanggal-absen').value;
-            if (!dataAbsensi[tanggal]) {
-                dataAbsensi[tanggal] = {};
-            }
-            dataAbsensi[tanggal][index] = status;
-
-            // Update UI
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.absen-btn').forEach(b => b.classList.remove('active'));
+            if (!dataAbsensi[tanggal]) dataAbsensi[tanggal] = {};
+            dataAbsensi[tanggal][siswaList[idx]] = status;
+            btn.parentElement.querySelectorAll('.absen-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
 
         function toggleHoliday() {
             const isHoliday = document.getElementById('is-holiday').checked;
-            const alasanInput = document.getElementById('alasan-libur');
-            const indicator = document.getElementById('holiday-indicator');
-            const tableContainer = document.querySelector('#page-absensi .table-container');
-
-            alasanInput.disabled = !isHoliday;
-            indicator.style.display = isHoliday ? 'block' : 'none';
-            tableContainer.style.display = isHoliday ? 'none' : 'block';
-
-            if (isHoliday) {
-                alasanInput.focus();
-            }
-        }
-
-        function checkHoliday() {
-            const tanggal = document.getElementById('tanggal-absen').value;
-            if (dataLibur[tanggal]) {
-                document.getElementById('is-holiday').checked = true;
-                document.getElementById('alasan-libur').value = dataLibur[tanggal];
-                toggleHoliday();
-            } else {
-                document.getElementById('is-holiday').checked = false;
-                document.getElementById('alasan-libur').value = '';
-                toggleHoliday();
-            }
-
-            // Load absensi untuk tanggal ini
-            if (dataAbsensi[tanggal]) {
-                updateAbsensiUI(tanggal);
-            } else {
-                // Reset ke default hadir
-                dataAbsensi[tanggal] = {};
-                siswaList.forEach((nama, index) => {
-                    dataAbsensi[tanggal][index] = 'H';
-                });
-                updateAbsensiUI(tanggal);
-            }
-        }
-
-        function updateAbsensiUI(tanggal) {
-            const rows = document.querySelectorAll('#tbody-absensi tr');
-            rows.forEach((row, index) => {
-                const status = dataAbsensi[tanggal]?.[index] || 'H';
-                const buttons = row.querySelectorAll('.absen-btn');
-                buttons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.textContent === status) {
-                        btn.classList.add('active');
-                    }
-                });
-            });
+            document.getElementById('alasan-libur').disabled = !isHoliday;
+            document.getElementById('holiday-indicator').style.display = isHoliday ? 'block' : 'none';
+            document.getElementById('table-container-absensi').style.display = isHoliday ? 'none' : 'block';
         }
 
         async function saveAbsensi() {
             const tanggal = document.getElementById('tanggal-absen').value;
             const isHoliday = document.getElementById('is-holiday').checked;
-            const alasanLibur = document.getElementById('alasan-libur').value;
-
-            showLoading();
-
-            try {
-                if (isHoliday) {
-                    dataLibur[tanggal] = alasanLibur;
-                    await sendToSheet('libur', { tanggal, alasan: alasanLibur });
-                } else {
-                    const absenData = [];
-                    siswaList.forEach((nama, index) => {
-                        absenData.push({
-                            nama: nama,
-                            status: dataAbsensi[tanggal]?.[index] || 'H'
-                        });
-                    });
-                    await sendToSheet('absensi', { tanggal, data: absenData });
-                }
-
-                hideLoading();
-                showToast('Data absensi berhasil disimpan!', 'success');
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal menyimpan data: ' + error.message, 'error');
+            showLoading('Menyimpan...');
+            
+            if (isHoliday) {
+                const alasan = document.getElementById('alasan-libur').value || 'Libur';
+                await apiPost({ action: 'save-libur', tanggal, alasan });
+            } else {
+                const absenData = siswaList.map(nama => ({
+                    nama,
+                    status: dataAbsensi[tanggal]?.[nama] || 'H'
+                }));
+                await apiPost({ action: 'save-absensi', tanggal, data: absenData });
             }
-        }
-
-        async function resetAbsensi() {
-            if (!confirm('Apakah Anda yakin ingin mereset semua data absensi?')) return;
-
-            showLoading();
-            try {
-                await sendToSheet('reset', { type: 'absensi' });
-                dataAbsensi = {};
-                dataLibur = {};
-                initAbsensi();
-                hideLoading();
-                showToast('Data absensi berhasil direset!', 'success');
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal mereset data: ' + error.message, 'error');
-            }
+            
+            hideLoading();
+            showToast('Absensi tersimpan!', 'success');
         }
 
         async function showRekapAbsensi() {
-            showLoading();
-            try {
-                const rekap = await getFromSheet('rekap-absensi');
-                renderRekapAbsensi(rekap);
-                document.getElementById('modal-rekap-absensi').classList.add('active');
-                hideLoading();
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal memuat rekap: ' + error.message, 'error');
-            }
-        }
-
-        function renderRekapAbsensi(rekap) {
+            showLoading('Memuat rekap...');
+            const res = await apiGet('rekap-absensi');
             const tbody = document.getElementById('tbody-rekap-absensi');
             tbody.innerHTML = '';
-
-            siswaList.forEach((nama, index) => {
-                const data = rekap?.[nama] || { H: 0, S: 0, I: 0, A: 0 };
-                const total = data.H + data.S + data.I + data.A;
-                const persen = total > 0 ? Math.round((data.H / total) * 100) : 0;
-                const namaParts = formatNama(nama);
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td style="text-align:left;">
-                        <span class="nama-depan">${namaParts.depan}</span>
-                        <span class="nama-belakang">${namaParts.belakang}</span>
-                    </td>
-                    <td class="status-hadir">${data.H}</td>
-                    <td class="status-sakit">${data.S}</td>
-                    <td class="status-izin">${data.I}</td>
-                    <td class="status-alpha">${data.A}</td>
+            
+            const rekap = res.data || {};
+            siswaList.forEach((nama, i) => {
+                const d = rekap[nama] || {H:0,S:0,I:0,A:0};
+                const total = d.H+d.S+d.I+d.A;
+                const persen = total > 0 ? Math.round(d.H/total*100) : 0;
+                const n = formatNama(nama);
+                tbody.innerHTML += `<tr>
+                    <td>${i+1}</td>
+                    <td style="text-align:left"><span class="nama-depan">${n.depan}</span><br><span class="nama-belakang">${n.belakang}</span></td>
+                    <td class="status-hadir">${d.H}</td>
+                    <td class="status-sakit">${d.S}</td>
+                    <td class="status-izin">${d.I}</td>
+                    <td class="status-alpha">${d.A}</td>
                     <td>${persen}%</td>
-                `;
-                tbody.appendChild(tr);
+                </tr>`;
             });
+            
+            hideLoading();
+            document.getElementById('modal-rekap-absensi').classList.add('active');
         }
 
-        async function showRekapLibur() {
-            showLoading();
-            try {
-                const rekap = await getFromSheet('rekap-libur');
-                renderRekapLibur(rekap);
-                document.getElementById('modal-rekap-libur').classList.add('active');
-                hideLoading();
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal memuat rekap: ' + error.message, 'error');
-            }
+        // ============ NILAI ============
+        async function initNilai(mapel) {
+            showLoading('Memuat nilai...');
+            const res = await apiGet(`get-nilai-${mapel}`);
+            const data = res.data || {};
+            if (mapel === 'bi') dataNilaiBi = data;
+            else dataNilaiPpkn = data;
+            
+            renderNilai(mapel);
+            hideLoading();
         }
 
-        function renderRekapLibur(rekap) {
-            const tbody = document.getElementById('tbody-rekap-libur');
-            tbody.innerHTML = '';
-
-            if (!rekap || rekap.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3">Belum ada data hari libur</td></tr>';
-                return;
-            }
-
-            rekap.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${formatDisplayDate(item.tanggal)}</td>
-                    <td>${item.alasan}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // ===== NILAI =====
-        function initNilai(mapel) {
+        function renderNilai(mapel) {
             const tbody = document.getElementById(`tbody-nilai-${mapel}`);
             tbody.innerHTML = '';
-
-            const dataNilai = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
-
-            siswaList.forEach((nama, index) => {
-                const namaParts = formatNama(nama);
-                const nilai = dataNilai[nama] || { nh1: '', nh2: '', nh3: '', nh4: '', nh5: '', sts: '', sat: '' };
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="sticky-col sticky-col-no">${index + 1}</td>
-                    <td class="sticky-col sticky-col-nama">
-                        <div class="nama-siswa">
-                            <span class="nama-depan">${namaParts.depan}</span>
-                            <span class="nama-belakang">${namaParts.belakang}</span>
-                        </div>
-                    </td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="nh1" value="${nilai.nh1}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'nh1', this.value)"></td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="nh2" value="${nilai.nh2}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'nh2', this.value)"></td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="nh3" value="${nilai.nh3}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'nh3', this.value)"></td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="nh4" value="${nilai.nh4}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'nh4', this.value)"></td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="nh5" value="${nilai.nh5}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'nh5', this.value)"></td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="sts" value="${nilai.sts}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'sts', this.value)"></td>
-                    <td><input type="number" class="nilai-input" data-nama="${nama}" data-field="sat" value="${nilai.sat}" min="0" max="100" onchange="updateNilai('${mapel}', '${nama}', 'sat', this.value)"></td>
-                    <td><span class="nilai-rata" id="rata-${mapel}-${index}">-</span></td>
-                `;
-                tbody.appendChild(tr);
-
-                // Hitung rata-rata awal
-                calculateRata(mapel, nama, index);
+            const data = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
+            
+            siswaList.forEach((nama, i) => {
+                const n = formatNama(nama);
+                const v = data[nama] || {};
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="sticky-col sticky-col-no">${i+1}</td>
+                        <td class="sticky-col sticky-col-nama"><div class="nama-siswa"><span class="nama-depan">${n.depan}</span><span class="nama-belakang">${n.belakang}</span></div></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-nh1-${i}" value="${v.nh1||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-nh2-${i}" value="${v.nh2||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-nh3-${i}" value="${v.nh3||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-nh4-${i}" value="${v.nh4||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-nh5-${i}" value="${v.nh5||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-sts-${i}" value="${v.sts||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><input type="number" class="nilai-input" id="${mapel}-sat-${i}" value="${v.sat||''}" min="0" max="100" oninput="calcRata('${mapel}',${i})"></td>
+                        <td><span class="nilai-rata" id="${mapel}-rata-${i}">${v.rata||'-'}</span></td>
+                    </tr>`;
             });
-
-            loadNilaiFromSheet(mapel);
         }
 
-        function updateNilai(mapel, nama, field, value) {
-            const dataNilai = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
-            if (!dataNilai[nama]) {
-                dataNilai[nama] = { nh1: '', nh2: '', nh3: '', nh4: '', nh5: '', sts: '', sat: '' };
-            }
-            dataNilai[nama][field] = value;
-
-            const index = siswaList.indexOf(nama);
-            calculateRata(mapel, nama, index);
-        }
-
-        function calculateRata(mapel, nama, index) {
-            const dataNilai = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
-            const nilai = dataNilai[nama] || {};
-
-            const nilaiArray = [nilai.nh1, nilai.nh2, nilai.nh3, nilai.nh4, nilai.nh5, nilai.sts, nilai.sat]
-                .filter(n => n !== '' && n !== undefined && n !== null)
-                .map(n => parseFloat(n));
-
-            let rata = '-';
-            if (nilaiArray.length > 0) {
-                rata = (nilaiArray.reduce((a, b) => a + b, 0) / nilaiArray.length).toFixed(1);
-            }
-
-            const rataEl = document.getElementById(`rata-${mapel}-${index}`);
-            if (rataEl) {
-                rataEl.textContent = rata;
-            }
+        function calcRata(mapel, idx) {
+            const fields = ['nh1','nh2','nh3','nh4','nh5','sts','sat'];
+            const vals = [];
+            const data = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
+            const nama = siswaList[idx];
+            if (!data[nama]) data[nama] = {};
+            
+            fields.forEach(f => {
+                const inp = document.getElementById(`${mapel}-${f}-${idx}`);
+                if (inp) {
+                    data[nama][f] = inp.value;
+                    if (inp.value) vals.push(parseFloat(inp.value));
+                }
+            });
+            
+            const rata = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '-';
+            document.getElementById(`${mapel}-rata-${idx}`).textContent = rata;
         }
 
         async function saveNilai(mapel) {
-            showLoading();
-            try {
-                const dataNilai = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
-                await sendToSheet('nilai', { mapel, data: dataNilai });
-                hideLoading();
-                showToast(`Nilai ${mapel === 'bi' ? 'Bahasa Indonesia' : 'PPKn'} berhasil disimpan!`, 'success');
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal menyimpan data: ' + error.message, 'error');
-            }
-        }
-
-        async function resetNilai(mapel) {
-            if (!confirm(`Apakah Anda yakin ingin mereset nilai ${mapel === 'bi' ? 'Bahasa Indonesia' : 'PPKn'}?`)) return;
-
-            showLoading();
-            try {
-                await sendToSheet('reset', { type: 'nilai', mapel });
-                if (mapel === 'bi') {
-                    dataNilaiBi = {};
-                } else {
-                    dataNilaiPpkn = {};
-                }
-                initNilai(mapel);
-                hideLoading();
-                showToast('Data nilai berhasil direset!', 'success');
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal mereset data: ' + error.message, 'error');
-            }
+            showLoading('Menyimpan nilai...');
+            const data = mapel === 'bi' ? dataNilaiBi : dataNilaiPpkn;
+            await apiPost({ action: 'save-nilai', mapel, data });
+            hideLoading();
+            showToast(`Nilai ${mapel==='bi'?'B. Indonesia':'PPKn'} tersimpan!`, 'success');
         }
 
         async function showRekapNilai(mapel) {
-            showLoading();
-            try {
-                const rekap = await getFromSheet(`rekap-nilai-${mapel}`);
-                renderRekapNilai(mapel, rekap);
-                document.getElementById('modal-rekap-nilai').classList.add('active');
-                hideLoading();
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal memuat rekap: ' + error.message, 'error');
-            }
-        }
-
-        function renderRekapNilai(mapel, rekap) {
+            showLoading('Memuat rekap...');
+            const res = await apiGet(`rekap-nilai-${mapel}`);
+            const data = res.data || {};
             const container = document.getElementById('content-rekap-nilai');
-            const mapelName = mapel === 'bi' ? 'Bahasa Indonesia' : 'PPKn';
-
-            let html = `
-                <h3 style="margin-bottom:15px;">Rekap Nilai ${mapelName}</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>NH1</th>
-                            <th>NH2</th>
-                            <th>NH3</th>
-                            <th>NH4</th>
-                            <th>NH5</th>
-                            <th>STS</th>
-                            <th>SAT</th>
-                            <th>Rata-rata</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            siswaList.forEach((nama, index) => {
-                const nilai = rekap?.[nama] || {};
-                const nilaiArray = [nilai.nh1, nilai.nh2, nilai.nh3, nilai.nh4, nilai.nh5, nilai.sts, nilai.sat]
-                    .filter(n => n !== '' && n !== undefined && n !== null)
-                    .map(n => parseFloat(n));
-
-                let rata = '-';
-                if (nilaiArray.length > 0) {
-                    rata = (nilaiArray.reduce((a, b) => a + b, 0) / nilaiArray.length).toFixed(1);
-                }
-
-                const namaParts = formatNama(nama);
-
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td style="text-align:left;">
-                            <span class="nama-depan">${namaParts.depan}</span>
-                            <span class="nama-belakang">${namaParts.belakang}</span>
-                        </td>
-                        <td>${nilai.nh1 || '-'}</td>
-                        <td>${nilai.nh2 || '-'}</td>
-                        <td>${nilai.nh3 || '-'}</td>
-                        <td>${nilai.nh4 || '-'}</td>
-                        <td>${nilai.nh5 || '-'}</td>
-                        <td>${nilai.sts || '-'}</td>
-                        <td>${nilai.sat || '-'}</td>
-                        <td><span class="nilai-rata">${rata}</span></td>
-                    </tr>
-                `;
+            
+            let html = `<h3 style="margin-bottom:10px;">Nilai ${mapel==='bi'?'B. Indonesia':'PPKn'}</h3>
+                <table><thead><tr><th>No</th><th>Nama</th><th>NH1</th><th>NH2</th><th>NH3</th><th>NH4</th><th>NH5</th><th>STS</th><th>SAT</th><th>Rata²</th></tr></thead><tbody>`;
+            
+            siswaList.forEach((nama, i) => {
+                const v = data[nama] || {};
+                const n = formatNama(nama);
+                html += `<tr>
+                    <td>${i+1}</td>
+                    <td style="text-align:left"><span class="nama-depan">${n.depan}</span><br><span class="nama-belakang">${n.belakang}</span></td>
+                    <td>${v.nh1||'-'}</td><td>${v.nh2||'-'}</td><td>${v.nh3||'-'}</td><td>${v.nh4||'-'}</td><td>${v.nh5||'-'}</td>
+                    <td>${v.sts||'-'}</td><td>${v.sat||'-'}</td><td><span class="nilai-rata">${v.rata||'-'}</span></td>
+                </tr>`;
             });
-
+            
             html += '</tbody></table>';
             container.innerHTML = html;
+            hideLoading();
+            document.getElementById('modal-rekap-nilai').classList.add('active');
         }
 
-        // ===== CATATAN KEJADIAN =====
-        function initKejadian() {
-            // Populate select siswa
+        // ============ KEJADIAN ============
+        async function initKejadian() {
             const select = document.getElementById('select-siswa-kejadian');
-            select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
-            siswaList.forEach(nama => {
-                select.innerHTML += `<option value="${nama}">${nama}</option>`;
-            });
-
-            // Set tanggal hari ini
+            select.innerHTML = '<option value="">-- Pilih --</option>';
+            siswaList.forEach(n => select.innerHTML += `<option value="${n}">${n}</option>`);
             document.getElementById('tanggal-kejadian').value = formatDate(new Date());
-
-            // Load data kejadian
-            loadKejadianFromSheet();
-            renderTableKejadian();
+            
+            showLoading('Memuat kejadian...');
+            const res = await apiGet('get-kejadian');
+            dataKejadian = res.data || [];
+            renderKejadian();
+            hideLoading();
         }
 
-        function toggleKejadian(element, id) {
-            const checkbox = element.querySelector('input[type="checkbox"]');
-            checkbox.checked = !checkbox.checked;
-            element.classList.toggle('selected', checkbox.checked);
+        function toggleKejadian(el, id) {
+            const cb = el.querySelector('input');
+            cb.checked = !cb.checked;
+            el.classList.toggle('selected', cb.checked);
         }
 
-        async function addKejadian() {
+        function addKejadian() {
             const siswa = document.getElementById('select-siswa-kejadian').value;
             const tanggal = document.getElementById('tanggal-kejadian').value;
             const catatan = document.getElementById('catatan-kejadian').value;
-
-            if (!siswa) {
-                showToast('Pilih siswa terlebih dahulu!', 'error');
-                return;
-            }
-
-            const selectedKejadian = [];
-            document.querySelectorAll('.kejadian-item input:checked').forEach(checkbox => {
-                const id = parseInt(checkbox.id.replace('kej-', ''));
-                selectedKejadian.push(jenisKejadian[id]);
+            
+            if (!siswa) { showToast('Pilih siswa!', 'error'); return; }
+            
+            const selected = [];
+            document.querySelectorAll('.kejadian-item input:checked').forEach(cb => {
+                const id = parseInt(cb.id.replace('kej-',''));
+                selected.push(jenisKejadian[id]);
             });
-
-            if (selectedKejadian.length === 0) {
-                showToast('Pilih minimal satu jenis pelanggaran!', 'error');
-                return;
-            }
-
-            selectedKejadian.forEach(kejadian => {
+            
+            if (!selected.length) { showToast('Pilih pelanggaran!', 'error'); return; }
+            
+            selected.forEach(k => {
                 dataKejadian.push({
                     id: Date.now() + Math.random(),
-                    siswa,
-                    tanggal,
-                    jenis: kejadian.nama,
-                    poin: kejadian.poin,
+                    tanggal, siswa,
+                    jenis: k.nama,
+                    poin: k.poin,
                     catatan
                 });
             });
-
+            
             // Reset form
             document.getElementById('select-siswa-kejadian').value = '';
             document.getElementById('catatan-kejadian').value = '';
-            document.querySelectorAll('.kejadian-item').forEach(item => {
-                item.classList.remove('selected');
-                item.querySelector('input').checked = false;
+            document.querySelectorAll('.kejadian-item').forEach(el => {
+                el.classList.remove('selected');
+                el.querySelector('input').checked = false;
             });
-
-            renderTableKejadian();
-            showToast('Catatan kejadian berhasil ditambahkan!', 'success');
+            
+            renderKejadian();
+            showToast('Kejadian ditambahkan!', 'success');
         }
 
-        function renderTableKejadian() {
+        function renderKejadian() {
             const tbody = document.getElementById('tbody-kejadian');
             tbody.innerHTML = '';
-
-            if (dataKejadian.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7">Belum ada catatan kejadian</td></tr>';
+            
+            if (!dataKejadian.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="opacity:0.5">Belum ada data</td></tr>';
                 return;
             }
-
-            dataKejadian.forEach((item, index) => {
-                // Cek total poin siswa
-                const totalPoin = getTotalPoinSiswa(item.siswa);
-                let rowClass = 'red-mark';
-                if (totalPoin >= 100) {
-                    rowClass = 'parent-call';
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = rowClass;
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${formatDisplayDate(item.tanggal)}</td>
-                    <td>${item.siswa}</td>
-                    <td>${item.jenis}</td>
-                    <td><span class="poin-badge">${item.poin}</span></td>
-                    <td>${item.catatan || '-'}</td>
-                    <td>
-                        <button class="nav-btn btn-reset" onclick="deleteKejadian(${index})" style="padding:5px 10px;font-size:0.8rem;">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            
+            dataKejadian.forEach((k, i) => {
+                const totalPoin = dataKejadian.filter(x => x.siswa === k.siswa).reduce((t,x) => t + x.poin, 0);
+                const rowClass = totalPoin >= 100 ? 'parent-call' : 'red-mark';
+                tbody.innerHTML += `
+                    <tr class="${rowClass}">
+                        <td>${i+1}</td>
+                        <td>${formatDisplay(k.tanggal)}</td>
+                        <td>${k.siswa.split(' ')[0]}</td>
+                        <td>${k.jenis}</td>
+                        <td><span class="poin-badge">${k.poin}</span></td>
+                        <td><button class="nav-btn btn-reset" onclick="deleteKejadian(${i})" style="padding:5px 8px;font-size:0.7rem"><i class="fas fa-trash"></i></button></td>
+                    </tr>`;
             });
         }
 
-        function getTotalPoinSiswa(namaSiswa) {
-            return dataKejadian
-                .filter(k => k.siswa === namaSiswa)
-                .reduce((total, k) => total + k.poin, 0);
-        }
-
-        function deleteKejadian(index) {
-            if (confirm('Hapus catatan kejadian ini?')) {
-                dataKejadian.splice(index, 1);
-                renderTableKejadian();
-                showToast('Catatan kejadian dihapus!', 'success');
+        function deleteKejadian(idx) {
+            if (confirm('Hapus kejadian ini?')) {
+                dataKejadian.splice(idx, 1);
+                renderKejadian();
             }
         }
 
         async function saveKejadian() {
-            showLoading();
-            try {
-                await sendToSheet('kejadian', { data: dataKejadian });
-                hideLoading();
-                showToast('Catatan kejadian berhasil disimpan!', 'success');
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal menyimpan data: ' + error.message, 'error');
-            }
-        }
-
-        async function resetKejadian() {
-            if (!confirm('Apakah Anda yakin ingin mereset semua catatan kejadian?')) return;
-
-            showLoading();
-            try {
-                await sendToSheet('reset', { type: 'kejadian' });
-                dataKejadian = [];
-                renderTableKejadian();
-                hideLoading();
-                showToast('Catatan kejadian berhasil direset!', 'success');
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal mereset data: ' + error.message, 'error');
-            }
+            showLoading('Menyimpan...');
+            await apiPost({ action: 'save-kejadian', data: dataKejadian });
+            hideLoading();
+            showToast('Kejadian tersimpan!', 'success');
         }
 
         async function showRekapKejadian() {
-            showLoading();
-            try {
-                const rekap = await getFromSheet('rekap-kejadian');
-                renderRekapKejadian(rekap);
-                document.getElementById('modal-rekap-kejadian').classList.add('active');
-                hideLoading();
-            } catch (error) {
-                hideLoading();
-                showToast('Gagal memuat rekap: ' + error.message, 'error');
-            }
-        }
-
-        function renderRekapKejadian(rekap) {
+            showLoading('Memuat rekap...');
+            const res = await apiGet('rekap-kejadian');
+            const rekap = res.data || {};
             const tbody = document.getElementById('tbody-rekap-kejadian');
             tbody.innerHTML = '';
-
-            siswaList.forEach((nama, index) => {
-                const data = rekap?.[nama] || { 
-                    'Berkata Kotor': 0, 
-                    'Tidak Masuk Kelas Saat Ulangan': 0, 
-                    'Pembulian': 0, 
-                    'Bertengkar': 0 
-                };
-
-                const totalPoin = (data['Berkata Kotor'] * 5) + 
-                                 (data['Tidak Masuk Kelas Saat Ulangan'] * 5) + 
-                                 (data['Pembulian'] * 10) + 
-                                 (data['Bertengkar'] * 25);
-
-                const namaParts = formatNama(nama);
-                let statusClass = '';
-                let status = 'Aman';
-
-                if (totalPoin >= 100) {
-                    statusClass = 'parent-call';
-                    status = '⚠️ PANGGIL WALI';
-                } else if (totalPoin >= 50) {
-                    statusClass = 'red-mark';
-                    status = 'Perlu Perhatian';
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = statusClass;
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td style="text-align:left;">
-                        <span class="nama-depan">${namaParts.depan}</span>
-                        <span class="nama-belakang">${namaParts.belakang}</span>
-                    </td>
-                    <td>${data['Berkata Kotor'] || 0}x</td>
-                    <td>${data['Tidak Masuk Kelas Saat Ulangan'] || 0}x</td>
-                    <td>${data['Pembulian'] || 0}x</td>
-                    <td>${data['Bertengkar'] || 0}x</td>
-                    <td><span class="poin-badge">${totalPoin}</span></td>
+            
+            siswaList.forEach((nama, i) => {
+                const d = rekap[nama] || { totalPoin: 0 };
+                let status = '✅ Aman';
+                let cls = '';
+                if (d.totalPoin >= 100) { status = '🚨 PANGGIL WALI'; cls = 'parent-call'; }
+                else if (d.totalPoin >= 50) { status = '⚠️ Perhatian'; cls = 'red-mark'; }
+                
+                const n = formatNama(nama);
+                tbody.innerHTML += `<tr class="${cls}">
+                    <td>${i+1}</td>
+                    <td style="text-align:left"><span class="nama-depan">${n.depan}</span><br><span class="nama-belakang">${n.belakang}</span></td>
+                    <td><span class="poin-badge">${d.totalPoin}</span></td>
                     <td>${status}</td>
-                `;
-                tbody.appendChild(tr);
+                </tr>`;
             });
+            
+            hideLoading();
+            document.getElementById('modal-rekap-kejadian').classList.add('active');
         }
 
-        // ===== GOOGLE SHEETS INTEGRATION =====
-        async function sendToSheet(action, data) {
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: action,
-                        data: data
-                    })
-                });
-                return true;
-            } catch (error) {
-                console.error('Error sending to sheet:', error);
-                throw error;
-            }
-        }
-
-        async function getFromSheet(action) {
-            try {
-                const response = await fetch(`${APPS_SCRIPT_URL}?action=${action}`);
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Error getting from sheet:', error);
-                // Return dummy data for demo
-                return getDummyData(action);
-            }
-        }
-
-        function getDummyData(action) {
-            // Dummy data untuk demo tanpa koneksi Google Sheets
-            if (action === 'rekap-absensi') {
-                const rekap = {};
-                siswaList.forEach(nama => {
-                    rekap[nama] = { H: Math.floor(Math.random() * 20) + 10, S: Math.floor(Math.random() * 3), I: Math.floor(Math.random() * 3), A: Math.floor(Math.random() * 2) };
-                });
-                return rekap;
-            }
-            if (action === 'rekap-libur') {
-                return [
-                    { tanggal: '2026-01-01', alasan: 'Tahun Baru 2026' },
-                    { tanggal: '2026-02-14', alasan: 'Hari Libur Nasional' }
-                ];
-            }
-            if (action.startsWith('rekap-nilai')) {
-                const rekap = {};
-                siswaList.forEach(nama => {
-                    rekap[nama] = {
-                        nh1: Math.floor(Math.random() * 30) + 70,
-                        nh2: Math.floor(Math.random() * 30) + 70,
-                        nh3: Math.floor(Math.random() * 30) + 70,
-                        nh4: Math.floor(Math.random() * 30) + 70,
-                        nh5: Math.floor(Math.random() * 30) + 70,
-                        sts: Math.floor(Math.random() * 30) + 70,
-                        sat: Math.floor(Math.random() * 30) + 70
-                    };
-                });
-                return rekap;
-            }
-            if (action === 'rekap-kejadian') {
-                const rekap = {};
-                siswaList.forEach(nama => {
-                    rekap[nama] = {
-                        'Berkata Kotor': Math.floor(Math.random() * 3),
-                        'Tidak Masuk Kelas Saat Ulangan': Math.floor(Math.random() * 2),
-                        'Pembulian': Math.floor(Math.random() * 2),
-                        'Bertengkar': Math.floor(Math.random() * 2)
-                    };
-                });
-                return rekap;
-            }
-            return {};
-        }
-
-        async function loadAbsensiFromSheet() {
-            try {
-                const data = await getFromSheet('absensi-data');
-                if (data) {
-                    dataAbsensi = data.absensi || {};
-                    dataLibur = data.libur || {};
-                }
-            } catch (error) {
-                console.log('Using local data');
-            }
-        }
-
-        async function loadNilaiFromSheet(mapel) {
-            try {
-                const data = await getFromSheet(`nilai-${mapel}`);
-                if (data) {
-                    if (mapel === 'bi') {
-                        dataNilaiBi = data;
-                    } else {
-                        dataNilaiPpkn = data;
-                    }
-                    initNilai(mapel);
-                }
-            } catch (error) {
-                console.log('Using local data for nilai');
-            }
-        }
-
-        async function loadKejadianFromSheet() {
-            try {
-                const data = await getFromSheet('kejadian-data');
-                if (data && data.length > 0) {
-                    dataKejadian = data;
-                    renderTableKejadian();
-                }
-            } catch (error) {
-                console.log('Using local data for kejadian');
-            }
-        }
-
-        // ===== INISIALISASI =====
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tampilkan halaman menu
-            showPage('menu');
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', async () => {
+            setConnection('loading');
+            await loadStatistik();
         });
     </script>
 </body>
